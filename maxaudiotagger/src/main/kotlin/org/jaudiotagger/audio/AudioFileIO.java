@@ -300,7 +300,7 @@ public class AudioFileIO {
     /**
      * Read the tag contained in the given file.
      *
-     * @param f The file to read.
+     * @param file The file to read.
      * @return The AudioFile with the file tag and the file encoding info.
      * @throws CannotReadException        If the file could not be read, the extension wasn't
      *                                    recognized, or an IO error occurred during the read.
@@ -309,16 +309,15 @@ public class AudioFileIO {
      * @throws IOException
      * @throws InvalidAudioFrameException
      */
-    public AudioFile readFile(File f)
+    public AudioFile readFile(File file)
             throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
-        //checkFileExists(f);
-        String ext = Utils.getExtension(f);
-
-        AudioFileReader afr = readers.get(ext);
-        if (afr == null) {
+        // checkFileExists(f);
+        String ext = Utils.getExtension(file);
+        AudioFileReader audioFileReader = readers.get(ext);
+        if (audioFileReader == null) {
             throw new CannotReadException(ErrorMessage.NO_READER_FOR_THIS_FORMAT.getMsg(ext));
         }
-        AudioFile tempFile = afr.read(f);
+        AudioFile tempFile = audioFileReader.read(file);
         tempFile.setExt(ext);
         return tempFile;
     }
